@@ -51,5 +51,8 @@ public class KafkaStreamsApplication {
 
     // start a stream
     streams.start();
+
+    // print the topology
+    System.out.println(streams.toString());
   }
 }
