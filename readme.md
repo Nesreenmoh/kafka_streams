@@ -5,6 +5,8 @@
 ```sudo lsof -i -P -n | grep 2181```
 - You can check the kafka-ui by browse **http://localhost:8080/ui/clusters/local/brokers**
 -  check the network of the container ```docker inspect network kafka2```
+- To build your application and make it as container ```docker build -t kafka-tutorials-app .```
+- Run your image inside the same network of kafka cluster ```docker run --network <network-name> -d <image-name>```
 
 
 ### List kafka topics
@@ -19,8 +21,31 @@
 - ```cd /usr/bin```
 - ```kafka-topics --create --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 2 --topic word-count-output``` 
 
+### create kafka topic with configuration
+- you need to create this inside kafka broker so the port will be different starts from 29092
+- ```
+  kafka-topics --bootstrap-server kafka1:29092 --create --topic employee-salary-compact \
+  --partitions 1 —replication-factor 1 \
+  --config cleanup.policy=compact --config min.cleanable.dirty.ratio=0.005 \ 
+  --config segment.ms=1000 ```
+  
 ### create a consumer 
-- ```kafka-console-consumer --bootstrap-server kafka1:29092 --topic word-count-output --from-beginning  --formatter kafka.tools.DefaultMessageFormatter   --property print.key=true   --property print.value=true   --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer```
-
+- 
+```
+kafka-console-consumer --bootstrap-server kafka1:29092 --topic employee-salary-compact --from-beginning \
+--formatter kafka.tools.DefaultMessageFormatter \
+--property print.key=true \
+--property print.value=true \
+--property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+--property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
+```
 ### create a producer
-- ```kafka-console-producer --bootstrap-server localhost:29092 --topic word-count-input```
+- ```kafka-console-producer --bootstrap-server localhost:29092 --topic employee-salary-compact --property parse.key=true --property key.separator=,```
+
+123,{"join":"1000"}
+456,{"Mark":"2000"}
+789,{"Lisa":"30000"}
+344,{"Nesreen":"40000"}
+789,{"Lisa":"80000"}
+456,{"Mark":"90000"}
+444,{"Nana:"45555"}
