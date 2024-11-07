@@ -42,6 +42,8 @@ kafka-console-consumer --bootstrap-server kafka1:29092 --topic employee-salary-c
 ### create a producer
 - ```kafka-console-producer --bootstrap-server localhost:29092 --topic employee-salary-compact --property parse.key=true --property key.separator=,```
 
+### Some data to be send by producer
+```
 123,{"join":"1000"}
 456,{"Mark":"2000"}
 789,{"Lisa":"30000"}
@@ -49,3 +51,4 @@ kafka-console-consumer --bootstrap-server kafka1:29092 --topic employee-salary-c
 789,{"Lisa":"80000"}
 456,{"Mark":"90000"}
 444,{"Nana:"45555"}
+```
