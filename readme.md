@@ -21,13 +21,13 @@
 - ```cd /usr/bin```
 - ```kafka-topics --create --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 2 --topic word-count-output``` 
 
-### create kafka topic with configuration
+### create kafka compacted topic with configuration
 - you need to create this inside kafka broker so the port will be different starts from 29092
 - ```
   kafka-topics --bootstrap-server kafka1:29092 --create --topic employee-salary-compact \
   --partitions 1 —replication-factor 1 \
   --config cleanup.policy=compact --config min.cleanable.dirty.ratio=0.005 \ 
-  --config segment.ms=1000 ```
+  --config segment.ms=10000 ```
   
 ### create a consumer 
 - 
