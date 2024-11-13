@@ -20,6 +20,7 @@
 - ``` docker exec -it kafka1 /bin/bash```
 - ```cd /usr/bin```
 - ```kafka-topics --create --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 2 --topic top-n-trending-words-input-topic-2``` 
+- ```kafka-topics --create --bootstrap-server kafka1:29092 --replication-factor 1 --partitions 2 --topic trending-words-output-topic-3``` 
 
 ### create kafka compacted topic with configuration
 - you need to create this inside kafka broker so the port will be different starts from 29092
@@ -31,15 +32,15 @@
 ### create a consumer 
 - 
 ```
-kafka-console-consumer --bootstrap-server kafka1:29092 --topic aggregated-bank-account-balance-topic-1 --from-beginning \
+kafka-console-consumer --bootstrap-server kafka1:29092 --topic trending-words-output-topic-3 --from-beginning \
 --formatter kafka.tools.DefaultMessageFormatter \
 --property print.key=true \
 --property print.value=true \
 --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
---property value.deserializer=org.apache.kafka.common.serialization.DoubleDeserializer 
+--property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
 ```
 ### create a producer
-- ```kafka-console-producer --bootstrap-server localhost:29092 --topic aggregated-bank-account-balance-topic-1 ```
+- ```kafka-console-producer --bootstrap-server localhost:29092 --topic top-n-trending-words-input-topic-2 ```
 
 ### Some data to be send by producer
 ```

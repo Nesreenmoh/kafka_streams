@@ -3,7 +3,6 @@ package org.example;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
@@ -13,11 +12,7 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Properties;
-import java.util.TreeMap;
 
 public class TopNTrendingWordsApplication {
   public static void main(String[] args) {
@@ -43,25 +38,23 @@ public class TopNTrendingWordsApplication {
     KStream<String, String> textInput = builder.stream("top-n-trending-words-input-topic-2");
 
 
-    KTable<String, Long> wordCount =
+
+    KTable<String, Long> countColors =
         textInput.flatMapValues((line) -> Arrays.asList(line.split("\\s+")))
             .selectKey((key, value) -> value)
-            .groupBy((key, value) -> value).count();
+            .groupByKey()
+            .count();
 
-
-//    wordCount
-//        .toStream()
-//        .map((key,value) -> new KeyValue<>(key.toUpperCase(), value))
-//        .groupBy((key, value) -> value)
-//        .aggregate(() -> new PriorityQueue<>(Comparator.comparingLong(Map.Entry::getValue)))
-//
-
-//        .to("trending-words-output-topic-3", Produced.with(Serdes.String(), Serdes.Long()));
-
-
+    countColors
+        .toStream()
+        .groupByKey()
+        .aggregate(() -> 0L,
+                (key,value,maxValue) -> Math.max(maxValue,value),
+                Materialized.with(Serdes.String(),Serdes.Long()))
+            .toStream()
+            .to("trending-words-output-topic-3", Produced.with(Serdes.String(), Serdes.Long()));
     return builder.build();
   }
-
 
 
   public static Properties config(){
@@ -69,7 +62,7 @@ public class TopNTrendingWordsApplication {
     Properties prop = new Properties();
 
     prop.put(StreamsConfig.APPLICATION_ID_CONFIG, "Top-N-Trending-Words");
-    prop.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
+    prop.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     prop.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     prop.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
     prop.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
