@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>favourite_colors</artifactId>
+    <artifactId>bank_balance</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -17,7 +17,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+            <repository>
+                <id>confluent</id>
+                <url>https://packages.confluent.io/maven/</url>
+            </repository>
+    </repositories>
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.16.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.2</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
@@ -29,22 +45,28 @@
             <version>2.0.16</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version> 7.6.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.16</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.17.0</version>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version> 1.11.3</version>
         </dependency>
-
-
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -67,7 +89,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.example.FavouriteColorsApplication</mainClass>
+                            <mainClass>org.example.BankBalanceProducerApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -78,6 +100,31 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Avro Plugin to generate the classes from avro schema  -->
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>1.11.1</version>
+                <executions>
+                    <execution>
+                        <id>bank-account-balance-event</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/</sourceDirectory>
+                            <imports>
+                                <import>${project.basedir}/src/main/resources/BankBalance.avsc</import>
+                            </imports>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                            <includes>
+                                <include>**/*.avsc</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -16,16 +16,16 @@ import org.apache.log4j.Logger;
 import java.util.Properties;
 
 
-public class FavouriteColorsApp {
+public class FavouriteColorsApplication {
 
-  private static final Logger logger = Logger.getLogger(FavouriteColorsApp.class);
+  private static final Logger logger = Logger.getLogger(FavouriteColorsApplication.class);
 
   public static void main(String[] args) {
 
     logger.info("Favourite Colors Application started");
 
     // create kafkaStreams
-    KafkaStreams streams = new KafkaStreams(new FavouriteColorsApp().createToplogy(), config());
+    KafkaStreams streams = new KafkaStreams(new FavouriteColorsApplication().createToplogy(), config());
 
     // start the stream
     streams.cleanUp();

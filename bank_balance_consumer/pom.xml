@@ -3,26 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>kafka-tutorials</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-    <groupId>org.example</groupId>
-    <artifactId>kafka-tutorials</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>bank_balance_consumer</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>favourite_colors</module>
-        <module>trending_words</module>
-        <module>bank_balance_producer</module>
-        <module>bank_balance_consumer</module>
-        <module>bank_balance_stream</module>
-    </modules>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.16.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.2</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
@@ -34,14 +46,28 @@
             <version>2.0.16</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version> 7.6.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.16</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version> 1.11.3</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -64,7 +90,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.example.KafkaStreamsApplication</mainClass>
+                            <mainClass>org.example.BankBalanceConsumerApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -75,6 +101,31 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Avro Plugin to generate the classes from avro schema  -->
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>1.11.1</version>
+                <executions>
+                    <execution>
+                        <id>bank-account-balance-event</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/</sourceDirectory>
+                            <imports>
+                                <import>${project.basedir}/src/main/resources/BankBalance.avsc</import>
+                            </imports>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                            <includes>
+                                <include>**/*.avsc</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
