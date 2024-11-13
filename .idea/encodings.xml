@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/bank_balance_consumer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bank_balance_consumer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bank_balance_consumer_app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bank_balance_consumer_app/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bank_balance_producer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bank_balance_producer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bank_balance_stream/src/main/java" charset="UTF-8" />
