@@ -52,7 +52,7 @@ public class TopNTrendingWordsApplication {
                 (key,value,maxValue) -> Math.max(maxValue,value),
                 Materialized.with(Serdes.String(),Serdes.Long()))
             .toStream()
-            .to("trending-words-output-topic-3", Produced.with(Serdes.String(), Serdes.Long()));
+            .to("trending-words-output-topic-4", Produced.with(Serdes.String(), Serdes.Long()));
     return builder.build();
   }
 

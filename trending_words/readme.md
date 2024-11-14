@@ -25,14 +25,14 @@
 ### create kafka compacted topic with configuration
 - you need to create this inside kafka broker so the port will be different starts from 29092
 - ```
-  kafka-topics --bootstrap-server kafka1:29092 --create --topic trending-words-output-topic-3 \
+  kafka-topics --bootstrap-server kafka1:29092 --create --topic trending-words-output-topic-4 \
   --partitions 1 —replication-factor 1 \
   --config cleanup.policy=compact --config min.cleanable.dirty.ratio=0.005 --config segment.ms=10000 ```
   
 ### create a consumer 
 - 
 ```
-kafka-console-consumer --bootstrap-server kafka1:29092 --topic trending-words-output-topic-3 --from-beginning \
+kafka-console-consumer --bootstrap-server kafka1:29092 --topic trending-words-output-topic-4 --from-beginning \
 --formatter kafka.tools.DefaultMessageFormatter \
 --property print.key=true \
 --property print.value=true \
@@ -40,7 +40,7 @@ kafka-console-consumer --bootstrap-server kafka1:29092 --topic trending-words-ou
 --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
 ```
 ### create a producer
-- ```kafka-console-producer --bootstrap-server localhost:29092 --topic top-n-trending-words-input-topic-2 ```
+- ```kafka-console-producer --bootstrap-server localhost:29092 --topic top-n-trending-words-input-topic-2```
 
 ### Some data to be send by producer
 ```
