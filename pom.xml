@@ -14,7 +14,7 @@
         <module>bank_balance_producer</module>
         <module>bank_balance_consumer</module>
         <module>bank_balance_stream</module>
-        <module>bank_balance_consumer_app</module>
+        <module> bank_balance_producer_JsonMapper</module>
     </modules>
 
     <properties>

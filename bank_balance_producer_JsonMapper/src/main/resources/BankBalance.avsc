@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "BankAccountBalanceEvent",
+  "namespace": "org.example.model",
+  "doc": "Avro schema for Bank Account Balance",
+  "fields": [
+    {
+      "name": "Name",
+      "type": "string",
+      "doc": "Name of the Account"
+    },
+    {
+      "name": "Amount",
+      "type": "double",
+      "doc": "Amount of the Bank Account"
+    },
+    {
+      "name": "Time",
+      "type": "long",
+      "doc": "Time of the transaction"
+    }
+  ]
+}
